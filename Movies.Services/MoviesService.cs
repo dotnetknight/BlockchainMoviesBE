@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace Movies.Services
 {
-    public class MoviesService
+    public partial class MoviesService
     {
         protected Nethereum.Web3.Web3 Web3 { get; }
 
@@ -18,15 +18,13 @@ namespace Movies.Services
             ContractHandler = web3.Eth.GetContractHandler(contractAddress);
         }
 
-        public Task<TransactionReceipt> AddMovieRequestAndWaitForReceiptAsync(int id, string name, string director, string senderAddress, CancellationTokenSource cancellationToken = default)
+        public Task<TransactionReceipt> AddMovieRequestAndWaitForReceiptAsync(MoviesStructure movie, string senderAddress, CancellationTokenSource cancellationToken = null)
         {
             var addMovieFunction = new AddMovieFunction
             {
-                Id = id,
-                Name = name,
-                Director = director,
+                Movie = movie,
                 GasPrice = new HexBigInteger(new BigInteger(400000)),
-                FromAddress = senderAddress
+                FromAddress = senderAddress,
             };
 
             return ContractHandler.SendRequestAndWaitForReceiptAsync(addMovieFunction, cancellationToken);

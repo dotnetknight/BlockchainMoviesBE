@@ -9,7 +9,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTransient<MoviesService>(x => ActivatorUtilities.CreateInstance<MoviesService>(x, new object[] { new Web3("http://localhost:7545"), "0x8be27502Edb8F1359e1d124B612B3a4d8D78Ec1d" }));
+builder.Services.AddTransient<MoviesService>(x => ActivatorUtilities.CreateInstance<MoviesService>(x, new object[] { new Web3("http://localhost:7545"), "0x2F24E0e1C9B39F242bcBCBBe2B98D70A0b9143fF" }));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

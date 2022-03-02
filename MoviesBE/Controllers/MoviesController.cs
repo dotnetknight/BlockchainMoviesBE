@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Movies.Models.Contracts;
 using Movies.Models.Requests;
@@ -11,11 +12,13 @@ namespace MoviesBE.Controllers
     {
         private readonly ILogger<MoviesController> _logger;
         private readonly MoviesService _moviesService;
+        private readonly IMapper _mapper;
 
-        public MoviesController(ILogger<MoviesController> logger, MoviesService moviesService)
+        public MoviesController(ILogger<MoviesController> logger, MoviesService moviesService, IMapper mapper)
         {
             _logger = logger;
             _moviesService = moviesService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -32,7 +35,8 @@ namespace MoviesBE.Controllers
         {
             _logger.Log(LogLevel.Information, "Adding new movie");
 
-            await _moviesService.AddMovieRequestAndWaitForReceiptAsync(request.Id, request.Name, request.Director, request.SenderAddress);
+            var movieToAdd = _mapper.Map<MoviesStructure>(request);
+            await _moviesService.AddMovieRequestAndWaitForReceiptAsync(movieToAdd, request.SenderAddress);
             return CreatedAtAction(null, null);
         }
     }
